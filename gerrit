@@ -1,0 +1,43 @@
+git push gerrit HEAD:refs/for/<BRANCH>
+git commit --amend
+
+
+git reset --hard HEAD~1				cofnięcie commitu i usunięcie zmian
+git reset -- mixed HEAD~1			domyślna, cofa commit, a zmiany w unstage area
+git reset --soft HEAD~1				cofnięcie commita, ale zachowanie zmian w staging area
+
+git checkout -b test <name of remote>/test	trackowanie zdalnego brancha
+git branch -u upstream/foo			trackowanie zdlanego brancha przez istniejącego (--set-upstream)
+
+git stash					do schowka pliki śledzone
+git stash -u					do schowka również pliki nie śledzone
+git stash save "nazwa"				do schowka z "nazwą"
+git stash list					wylistowanie zmian w schowku
+git stash pop					przywrócenie zmian i usunięcie ich ze schowka
+git stash apply					przywrócenie zmian, ale zostawienie ich w schowku
+
+git pull -X theirs				pull i akceptacja zmian z repo, potem git merge
+git checkout --theirs path/to/file		jeśli już konflikt to w ten sposób (można --ours)
+
+git merge <branch>				merge <branch> do aktualnego brancha, w razie konfliktów tworzy commit mergujący
+git checkout <branch>				zmiana brancha
+git branch -d/-D <branch>			usunięcie brancha
+git fetch					aktualizuje wskaźnik ze zdalnego repo origin/master
+git rebase <branch>				złączenie historii commitów, aktualny branch zyskuje commity <branch>
+
+git fetch && git rebase origin/master
+git pull --rebase				fetch zmian z repo i dodanie do aktualnego branch commitów z origin/master
+git rebase --abort				porzucenie rebase
+git rebase --continue				po rozwiązaniu konfliktów jazda
+
+git branch -vv
+git remote show (-n) orgin			pokazanie lokalnych branchów i na co wskazują w repo
+
+git cherry-pick <branch>			pobierz ostatni commit z <branch>
+git remote update origin --prune
+
+git clone --bare				klonowanie repo czystego, do pushnięcia potem
+git push -f --mirror				pushnięcie do nowego repo bare repo
+
+git remote update origin --prune		aktualizacja lokalnej listy zdalnych branchy
+git reflog > git checkout <sha1>		odczytanie sha1 usuniętego brancha i checkout go

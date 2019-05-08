@@ -1,0 +1,74 @@
+================ Opis ======================
+
+Stany kontenera:
+	created - stworzony, nieuruchominoy
+	restarting - restartowany proces
+	up - wykonywany proces
+	paused - wstrzymany proces
+	exited - zakończone wykonywanie
+
+Kontener domyślnie uruchamiany z poleceniem ustawionym w obrazie, można zmienić prrzy uruchomieniu, można w trakcie działania również. Zamknięcie połączonego terminala kombinacją ctrl+C, aczkolwiek jest również wtedy zatrzymywany główny proces kontenera, dlatego możemy użyć różnych opcji, aby temu zapobiec.
+
+
+
+============== Quick guide =================
+
+docker pull [obraz]
+docker images
+docker run -d -p [endport]:[startport]
+docker ps
+docker-compose up
+
+
+============= yaml file ====================
+docker-compose.yml
+
+db:							identyfikator kontenera
+	image: postgres:9.4				oczekiwany obraz
+	environment:					zmienne środowiskowe
+		- POSTGRES_PASSWORD=user
+		- POSTGRES_USER=user
+	ports:						mapowanie portów
+		- "5432:5432"
+	volumes:					zamontowanie plików lub katalogu do kontenera, format [ścieżka źródłowa]:[ścieżka docelowa]
+		- ./src/sql/postgres_engine_7.3.0.sql:/docker-entrypoint-initdb.d/postgres_engine_7.3.0.sql
+		- ./src/sql/postgres_identity_7.3.0.sql:/docker-entrypoint-initdb.d/postgres_identity_7.3.0.sql
+
+
+
+================ Polecenia ==================
+
+docker pull [obraz]						pobranie obrazu z docker hub
+docker images							dostępne lokalnie obrazy
+docker history [id lub nazwa obrazu]				lista warstw danego obrazu
+docker rmi [id lub nazwa obrazu]				usunięcie obrazu
+docker images-q							zwraca listę idnetyfikatorów wszystkich obrazów
+docker run [id lub nazwa obrazu]				stworzenie i uruchomienie kontenera
+	--name							nazwanie kontenera
+	-d (--detach==true) [obraz]				uruchomienie w tle (domyślnie na pierwszym planie)
+	--rm=true						kontener automatycznie usunięty po zakończeniu działania
+	-t (--tty=true)						zaalokowany terminal w kontenerze
+	-t -i (--interactive=true)				lokalne we/wy na we/wy kontenera. Zakończenie kombinacją ctrl+p, ctrl+q
+	--sig-term=false					brak wysłania sygnału kończącego proces
+	-p [endport]:[startport]				przekierowanie portu kontenera z [startport] na [endport]
+	--expose=[port]						udostępnienie [port] dla innego kontenera
+	--link=[kontener]					połączenie z innym kontenerem, który udostępnił port
+	-v [zasób gospodarze]:[mount w kontenerze] (--volume)	zmapowanie zasobu gospodarza i kontenera
+	-v [zasób kontenera]					udostępnia zasoby innym kontenerom, gdy się połączą
+	--volumes-from [kontener]				wskazanie przez inny kontener kontenera udostępniającego 	
+
+docker ps -a							lista wszystkch kontenerów
+docker stop [obraz]						zatrzymanie kontenera
+docker rm [obraz]						usunięcie kontenera
+	docker rm $(docker ps -a -q)				usunięcie wszystkich kontenerów
+docker run [obraz] [polecenie]					zlecenie wykonania polecenia kontenerowi
+	-c [komenda]						z komendą
+docker exec [kontener] [polecenie]				wykonanie polecenia na kontenerze up
+
+docker attach [kontener]					podgląd aktywności działającego kontenera i jego strumienia. Połączenie z terminalem, tylko na up kontenerze
+
+docker exec -it [kontener] bash					dostęp do systemu plików, strumieni we/wy, nowa powłoka
+
+docker run -e [nazwa]:[wartość] [obraz]				uruchomienie obrazu z ustawieniem zmiennych środowiskowych
+
+
